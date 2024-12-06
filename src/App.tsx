@@ -186,7 +186,7 @@ const router = createBrowserRouter([
         path: "/offers",
         element: (
           <ProtectedRoute>
-            <Offers />
+            <Offers />,
           </ProtectedRoute>
         ),
       },
