@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://newinsu.site/api",
+  baseURL: "https://newinsu.site/api",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json"
