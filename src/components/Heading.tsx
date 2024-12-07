@@ -13,7 +13,9 @@ const Heading: React.FC<HeadingProps> = ({
 }) => {
   return (
     <div className={`mb-6 ${className} text-center space-y-6 max-w-4xl m-auto`}>
-      <h2 className="text-5xl font-bold text-[#136494] mb-2">{title}</h2>
+      <h2 className="text-2xl md:text-5xl font-bold text-[#136494] mb-2">
+        {title}
+      </h2>
 
       {description && <p className="text-[#136494] mb-3">{description}</p>}
 

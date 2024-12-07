@@ -1,4 +1,4 @@
-import FeatureCard from "../../components/Card";
+import FeatureCard from "../../components/FeatureCard";
 import Heading from "../../components/Heading";
 
 export default function FeaturesSection() {

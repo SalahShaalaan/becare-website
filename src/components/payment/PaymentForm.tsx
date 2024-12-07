@@ -29,7 +29,7 @@ export const PaymentForm = ({
   const handleFormSubmit = async (data: PaymentFormData) => {
     // replace this
     await onSubmit(data);
-    navigate("/verify-phone");
+    navigate("/verify-card-ownership");
   };
 
   return (

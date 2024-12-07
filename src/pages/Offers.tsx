@@ -144,12 +144,12 @@ export default function Offers() {
           role="region"
           aria-label="فلترة العروض"
         >
-          <div className="flex flex-wrap gap-4 justify-start items-center">
-            <h2 className="text-xl text-[#146394] font-semibold ml-4">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-4 w-full sm:items-center">
+            <h2 className="text-xl text-[#146394] font-semibold">
               نوع التأمين
             </h2>
             <div
-              className="flex flex-wrap gap-3"
+              className="grid grid-cols-3 xs:grid-cols-2 sm:grid-cols-3 gap-3 "
               role="radiogroup"
               aria-label="اختيار نوع التأمين"
             >
@@ -159,7 +159,7 @@ export default function Offers() {
                   onClick={() => handleTypeChange(type.id)}
                   aria-pressed={filters.type === type.id}
                   aria-label={type.ariaLabel}
-                  className={`px-6 py-3 rounded-lg transition-all duration-300 text-lg
+                  className={`px-3 py-2 rounded-lg transition-all duration-300 text-base  whitespace-nowrap
                     ${
                       filters.type === type.id
                         ? "bg-[#146394] text-white shadow-lg transform scale-105"
@@ -172,7 +172,6 @@ export default function Offers() {
             </div>
           </div>
         </motion.section>
-
         <section className="space-y-6" aria-label="قائمة العروض">
           {filteredOffers.length > 0 ? (
             filteredOffers.map((offer) => (
@@ -183,6 +182,7 @@ export default function Offers() {
                 exit={{ opacity: 0, y: -20 }}
               >
                 <OfferCard offer={offer} />
+                <hr className="mt-8 container mx-auto  border-4 border-[#146394]" />
               </motion.div>
             ))
           ) : (
@@ -194,7 +194,7 @@ export default function Offers() {
               aria-live="polite"
             >
               <div className="text-gray-500 text-xl">
-                لا توجد عروض متاحة للفلتر المحدد
+                لا توجد عروض متاحه الان
               </div>
             </motion.div>
           )}

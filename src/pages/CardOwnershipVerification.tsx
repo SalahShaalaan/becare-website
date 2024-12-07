@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -25,42 +25,51 @@ export const CardOwnershipVerification = () => {
     return () => clearInterval(interval);
   }, [dispatch]);
 
-  const formatTime = (seconds: number) => {
+  const formatTime = useCallback((seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${String(minutes).padStart(2, "0")}:${String(
       remainingSeconds
     ).padStart(2, "0")}`;
-  };
+  }, []);
 
-  const handleOtpChange = (index: number, value: string) => {
-    if (value.length > 1) return;
+  const handleOtpChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value.replace(/\D/g, "");
+      const digits = value.split("").slice(0, 6);
+      while (digits.length < 6) digits.push("");
+      digits.forEach((digit, index) => {
+        dispatch(setOtpDigit({ index, value: digit }));
+      });
+      dispatch(clearError());
+    },
+    [dispatch]
+  );
 
-    dispatch(setOtpDigit({ index, value: value.replace(/\D/g, "") }));
-    dispatch(clearError());
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      const otpValue = otp.join("");
 
-    if (value && index < 3) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      nextInput?.focus();
-    }
-  };
+      if (otpValue.length !== 6) {
+        dispatch(setError("يرجى إدخال رمز التحقق كاملاً"));
+        return;
+      }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const otpValue = otp.join("");
+      try {
+        // API call would go here
+        navigate("/verify-card");
+      } catch {
+        dispatch(setError("رمز التحقق غير صحيح"));
+      }
+    },
+    [dispatch, navigate, otp]
+  );
 
-    if (otpValue.length !== 4) {
-      dispatch(setError("يرجى إدخال رمز التحقق كاملاً"));
-      return;
-    }
-
-    try {
-      // API call would go here
-      navigate("/payment-success");
-    } catch {
-      dispatch(setError("رمز التحقق غير صحيح"));
-    }
-  };
+  const handleResendCode = useCallback(() => {
+    dispatch(resetTimer());
+    // Add API call for resending code here
+  }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pt-36 px-4">
@@ -90,24 +99,30 @@ export const CardOwnershipVerification = () => {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
-              <label className="block text-right mb-4 text-[#146394] font-medium">
+              <label
+                htmlFor="otp-input"
+                className="block text-right mb-4 text-[#146394] font-medium"
+              >
                 رمز التحقق <span className="text-red-500">*</span>
               </label>
-              <div className="flex justify-center gap-4 dir-ltr">
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    id={`otp-${index}`}
-                    type="text"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(index, e.target.value)}
-                    className="w-14 h-14 md:w-16 md:h-16 text-center text-2xl font-bold border-2 rounded-lg focus:border-[#146394] focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
-                  />
-                ))}
+              <div className="flex justify-center">
+                <input
+                  id="otp-input"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={otp.join("")}
+                  onChange={handleOtpChange}
+                  className="w-48 h-14 text-center text-2xl font-bold border-2 rounded-lg focus:border-[#146394] focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
+                  placeholder="######"
+                  aria-label="Enter verification code"
+                />
               </div>
               {error && (
-                <p className="text-red-500 text-sm mt-2 text-center animate-shake">
+                <p
+                  role="alert"
+                  className="text-red-500 text-sm mt-2 text-center animate-shake"
+                >
                   {error}
                 </p>
               )}
@@ -125,13 +140,13 @@ export const CardOwnershipVerification = () => {
               className="w-full bg-[#146394] text-white py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-[#0f4c70] transform hover:scale-[0.99] active:scale-[0.97] text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={otp.some((digit) => !digit)}
             >
-              تأكيد العملية
+              متابعة
             </button>
 
             {timer === 0 && (
               <button
                 type="button"
-                onClick={() => dispatch(resetTimer())}
+                onClick={handleResendCode}
                 className="w-full text-[#146394] py-2 font-semibold hover:bg-blue-50 rounded-lg transition-all duration-300"
               >
                 إعادة إرسال الرمز

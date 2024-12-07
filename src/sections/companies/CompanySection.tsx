@@ -23,7 +23,7 @@ const CompanySection = () => {
               x: [-100, -50, 0],
             }}
             transition={{
-              duration: 20,
+              duration: 4,
               repeat: Infinity,
               ease: "linear",
             }}

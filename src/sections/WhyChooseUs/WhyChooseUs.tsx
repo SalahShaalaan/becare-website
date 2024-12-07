@@ -1,6 +1,6 @@
 const WhyChooseUsCard = ({ icon, title }: { icon: string; title: string }) => (
   <div className="flex flex-col items-center justify-center p-6 space-y-4 text-center group">
-    <div className="relative w-20 h-20 mb-3 transition-transform duration-300 group-hover:scale-110">
+    <div className="relative w-auto h-auto mb-3 transition-transform duration-300 group-hover:scale-110">
       <img
         src={`/icons/choose-${icon}.svg`}
         alt={title}
@@ -26,11 +26,11 @@ export default function WhyChooseUs() {
   return (
     <section className="py-16 px-4 md:px-8 lg:px-16">
       <div className="container mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#136494]">
+        <h1 className="text-2xl md:text-4xl font-bold text-center mb-12 text-[#136494]">
           لماذا يجب أن يكون بي كير خيارك الأول في التأمين
         </h1>
 
-        <div className="grid grid-cols-auto-fit-450 gap-6">
+        <div className="grid md:grid-cols-auto-fit-450 grid-cols-auto-fit-250  gap-6 mt-14">
           {reasons.map((reason) => (
             <WhyChooseUsCard
               key={reason.icon}

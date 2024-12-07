@@ -11,18 +11,18 @@ const Home = () => {
         <img
           src="/right-shapes.png"
           alt="decorative shapes"
-          className="absolute right-20 top-40 w-auto h-auto object-contain opacity-20 z-0"
+          className="md:block hidden absolute right-20 top-40 w-auto h-auto object-contain opacity-20 z-0"
         />
 
         <img
           src="/left-shapes.png"
           alt="decorative shapes"
-          className="absolute left-20 top-40 w-auto h-auto  object-contain opacity-70 z-0"
+          className="absolute md:block hidden left-20 top-40 w-auto h-auto  object-contain opacity-70 z-0"
         />
 
         <div className="container mx-auto px-6 h-full flex flex-col justify-center items-center text-center relative z-10">
           <div className="space-y-6">
-            <h1 className="text-6xl font-extrabold mb-6 tracking-wide leading-tight drop-shadow-lg animate-fadeIn">
+            <h1 className="text-3xl text-nowrap md:text-5xl font-extrabold mb-6leading-relaxed">
               قارن ,أمن ,استلم وثيقتك
             </h1>
             <p className="text-2xl mb-8 font-light leading-relaxed opacity-90 max-w-3xl mx-auto">

@@ -29,7 +29,7 @@ export function MarketOffers() {
           title="خصومات وريف"
           description="خصومات وعروض مباشرة من مختلف المتاجر العالمية والمحلية لعملاء بي كير (أفراد، شركات)"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-auto-fit-250 gap-6 mt-14">
           {offers.map((offer) => (
             <OfferCard
               key={offer.id}
