@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 
 const CompanySection = () => {
   const companies = Array.from({ length: 11 }, (_, i) => ({
@@ -10,52 +12,37 @@ const CompanySection = () => {
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        {/* Section Title */}
         <h2 className="text-3xl font-bold text-center text-[#136494] mb-12">
           مصرح من
         </h2>
 
-        {/* Logos Container */}
-        <div className="overflow-hidden">
-          <motion.div
-            className="flex gap-8"
-            animate={{
-              x: [-100, -50, 0],
+        <div className="max-w-4xl mx-auto">
+          <Swiper
+            modules={[Autoplay]}
+            spaceBetween={20}
+            slidesPerView={4}
+            loop={true}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: false,
+              stopOnLastSlide: false,
+              waitForTransition: true,
             }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+            speed={2000}
           >
-            {/* First Set of Logos */}
             {companies.map((company) => (
-              <div
-                key={company.id}
-                className="flex-shrink-0 w-32 h-32 flex items-center justify-center"
-              >
-                <img
-                  src={company.logo}
-                  alt={company.alt}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
+              <SwiperSlide key={company.id}>
+                <div className="w-32 h-32 flex items-center justify-center">
+                  <img
+                    src={company.logo}
+                    alt={company.alt}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+              </SwiperSlide>
             ))}
-
-            {/* Duplicate Set for Seamless Animation */}
-            {companies.map((company) => (
-              <div
-                key={`duplicate-${company.id}`}
-                className="flex-shrink-0 w-32 h-32 flex items-center justify-center"
-              >
-                <img
-                  src={company.logo}
-                  alt={company.alt}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-            ))}
-          </motion.div>
+          </Swiper>
         </div>
       </div>
     </section>

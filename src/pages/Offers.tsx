@@ -136,7 +136,7 @@ export default function Offers() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 md:py-12">
-      <div className=" px-4 sm:px-6 lg:px-8">
+      <div className=" px-4 sm:px-6 lg:px-8 container mx-auto">
         <motion.section
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -149,7 +149,7 @@ export default function Offers() {
               نوع التأمين
             </h2>
             <div
-              className="grid grid-cols-3 xs:grid-cols-2 sm:grid-cols-3 gap-3 "
+              className="grid grid-cols-3  gap-3 md:w-1/3 w-fit"
               role="radiogroup"
               aria-label="اختيار نوع التأمين"
             >

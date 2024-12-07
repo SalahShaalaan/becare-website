@@ -52,18 +52,17 @@ export const InsuranceDetails = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 md:py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        <h1 className="text-2xl md:text-3xl font-bold text-right mb-6 md:mb-8 text-[#146394]">
+          بيانات التأمين
+        </h1>
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 backdrop-blur-lg bg-opacity-95">
-          <h1 className="text-2xl md:text-3xl font-bold text-right mb-6 md:mb-8 text-[#146394]">
-            بيانات التأمين
-          </h1>
-
           <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
             {/* Insurance Type Selection */}
             <div className="space-y-3">
               <label className="block text-right font-medium text-[#146394]">
                 نوع التأمين
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-3  gap-3 md:w-full w-fit">
                 {insuranceTypes.map((type) => (
                   <button
                     key={type.id}
@@ -73,7 +72,7 @@ export const InsuranceDetails = () => {
                         updateField({ insuranceType: type.id as InsuranceType })
                       )
                     }
-                    className={`p-4 rounded-xl border-2 text-center transition-all duration-300 ${
+                    className={`p-3 rounded-xl border-2 text-center transition-all duration-300 ${
                       formData.insuranceType === type.id
                         ? "bg-[#146394] text-white border-[#146394]"
                         : "border-gray-200 hover:border-[#146394] text-[#146394]"

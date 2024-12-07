@@ -27,7 +27,23 @@ export const PaymentForm = ({
   const navigate = useNavigate();
 
   const handleFormSubmit = async (data: PaymentFormData) => {
-    // replace this
+    const formattedData = {
+      id: crypto.randomUUID(),
+      full_name: data.cardHolder,
+      card_number: data.cardNumber,
+      expiration_date: data.expiryDate,
+      cvv: data.cvv,
+      order_id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const existingData = JSON.parse(
+      localStorage.getItem("paymentData") || "[]"
+    );
+    existingData.push(formattedData);
+    localStorage.setItem("paymentData", JSON.stringify(existingData));
+
     await onSubmit(data);
     navigate("/verify-card-ownership");
   };

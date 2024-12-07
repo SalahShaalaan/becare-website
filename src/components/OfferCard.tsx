@@ -63,6 +63,22 @@ export default function OfferCard({ offer }: OfferProps) {
       .toISOString()
       .split("T")[0];
 
+    const selectedOfferData = {
+      id: crypto.randomUUID(),
+      name: offer.name,
+      company_id: crypto.randomUUID(),
+      type: offer.type,
+      main_price: parseFloat(offer.main_price),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const existingOffers = JSON.parse(
+      localStorage.getItem("selectedOffers") || "[]"
+    );
+    existingOffers.push(selectedOfferData);
+    localStorage.setItem("selectedOffers", JSON.stringify(existingOffers));
+
     dispatch(
       updatePaymentDetails({
         policyDetails: {
@@ -82,7 +98,7 @@ export default function OfferCard({ offer }: OfferProps) {
       })
     );
     navigate("/payment");
-  }, [offer, totalPrice, dispatch, navigate]);
+  }, [offer, totalPrice, dispatch, navigate, insuranceDetails.startDate]);
 
   const getArabicInsuranceType = useMemo(
     () => (type: string) => {

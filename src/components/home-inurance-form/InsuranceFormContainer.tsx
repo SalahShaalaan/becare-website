@@ -10,12 +10,26 @@ import { validateInsuranceForm } from "./validation";
 const InsuranceFormContainer: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<InsuranceFormData>({
-    purpose: "new",
-    vehicleType: "registration",
-    fullName: "",
-    agreeToTerms: false,
-  });
+  const getInitialFormData = () => {
+    const savedData = localStorage.getItem("insuranceFormData");
+    if (savedData) {
+      return JSON.parse(savedData);
+    }
+    return {
+      purpose: "new",
+      vehicleType: "registration",
+      fullName: "",
+      agreeToTerms: false,
+    };
+  };
+
+  const [formData, setFormData] = useState<InsuranceFormData>(
+    getInitialFormData()
+  );
+
+  useEffect(() => {
+    localStorage.setItem("insuranceFormData", JSON.stringify(formData));
+  }, [formData]);
   const [errors, setErrors] = useState<FormErrors>({});
 
   // Effect to enforce vehicle type constraints based on purpose

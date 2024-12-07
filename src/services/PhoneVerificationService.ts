@@ -4,8 +4,8 @@ export class PhoneVerificationService {
     return phoneRegex.test(phone);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async verifyPhone(_phone?: string, _operator?: string): Promise<void> {
-    // Replace this
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();

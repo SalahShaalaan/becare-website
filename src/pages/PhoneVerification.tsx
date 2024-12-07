@@ -33,7 +33,6 @@ export const PhoneVerification = () => {
 
     let isValid = true;
 
-    // disable this if you wanna test
     if (!PhoneVerificationService.validatePhone(phone)) {
       dispatch(
         setErrors({
@@ -42,7 +41,6 @@ export const PhoneVerification = () => {
       );
       isValid = false;
     }
-    // _____
 
     if (!operator) {
       dispatch(setErrors({ operator: "يرجى اختيار مشغل شبكة الجوال" }));
