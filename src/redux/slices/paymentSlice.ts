@@ -2,16 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { z } from 'zod';
 
 export const PaymentSchema = z.object({
-  cardHolder: z
+  full_name: z
     .string()
     .min(3, { message: "اسم حامل البطاقة يجب أن يكون 3 أحرف على الأقل" })
     .max(50, { message: "اسم حامل البطاقة يجب أن يكون أقل من 50 حرفًا" }),
-  cardNumber: z
+  card_number: z
     .string()
     .regex(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12})$/, {
       message: "رقم بطاقة غير صالح"
     }),
-  expiryDate: z
+  expiration_date: z
     .string()
     .regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, {
       message: "تنسيق تاريخ الانتهاء غير صالح (MM/YY)"
@@ -27,9 +27,9 @@ interface PaymentState {
   formData: PaymentFormData;
   isSubmitting: boolean;
   policyDetails: {
-    insuranceType: string;
+    insurance_type: string;
     company: string;
-    startDate: string;
+    start_date: string;
     endDate: string;
     referenceNumber: string;
   };
@@ -42,16 +42,16 @@ interface PaymentState {
 
 const initialState: PaymentState = {
   formData: {
-    cardHolder: '',
-    cardNumber: '',
-    expiryDate: '',
+    full_name: '',
+    card_number: '',
+    expiration_date: '',
     cvv: '',
   },
   isSubmitting: false,
   policyDetails: {
-    insuranceType: "ضد الغير",
+    insurance_type: "ضد الغير",
     company: "الصقر للتأمين",
-    startDate: "2024-11-30",
+    start_date: "2024-11-30",
     endDate: "2025-11-28",
     referenceNumber: "1643877167",
   },
@@ -71,9 +71,9 @@ const paymentSlice = createSlice({
     },
     updatePaymentDetails: (state, action: PayloadAction<{
       policyDetails: {
-        insuranceType: string;
+        insurance_type: string;
         company: string;
-        startDate: string;
+        start_date: string;
         endDate: string;
         referenceNumber: string;
       };

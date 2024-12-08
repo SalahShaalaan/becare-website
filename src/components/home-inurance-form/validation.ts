@@ -3,36 +3,36 @@ import { FormErrors, InsuranceFormData } from "../../types/insurance";
 export const validateInsuranceForm = (data: InsuranceFormData): FormErrors => {
   const errors: FormErrors = {};
 
-  if (!data.fullName?.trim() || data.fullName.length < 3) {
-    errors.fullName = 'الاسم يجب أن يكون أكثر من 3 حروف';
+  if (!data.documment_owner_full_name?.trim() || data.documment_owner_full_name.length < 3) {
+    errors.documment_owner_full_name = 'الاسم يجب أن يكون أكثر من 3 حروف';
   }
 
-  if (data.purpose === 'new') {
-    if (!data.nationalId || !/^\d{10}$/.test(data.nationalId)) {
-      errors.nationalId = 'رقم الهوية يجب أن يكون 10 أرقام';
+  if (data.insurance_purpose === 'renewal') {
+    if (!data.owner_identity_number || !/^\d{10}$/.test(data.owner_identity_number)) {
+      errors.owner_identity_number = 'رقم الهوية يجب أن يكون 10 أرقام';
     }
   } else {
-    if (!data.buyerNationalId || !/^\d{10}$/.test(data.buyerNationalId)) {
-      errors.buyerNationalId = 'رقم هوية المشتري يجب أن يكون 10 أرقام';
+    if (!data.buyer_identity_number || !/^\d{10}$/.test(data.buyer_identity_number)) {
+      errors.buyer_identity_number = 'رقم هوية المشتري يجب أن يكون 10 أرقام';
     }
-    if (!data.sellerNationalId || !/^\d{10}$/.test(data.sellerNationalId)) {
-      errors.sellerNationalId = 'رقم هوية البائع يجب أن يكون 10 أرقام';
+    if (!data.seller_identity_number || !/^\d{10}$/.test(data.seller_identity_number)) {
+      errors.seller_identity_number = 'رقم هوية البائع يجب أن يكون 10 أرقام';
     }
   }
 
-  if (data.vehicleType === 'registration') {
+  if (data.vehicle_type === 'registration') {
     // if (!data.phoneNumber || !/^05\d{8}$/.test(data.phoneNumber)) {
     //   errors.phoneNumber = 'رقم الهاتف يجب أن يبدأ بـ 05 ويكون 10 أرقام';
     // }
-    if (!data.vehicleSerialNumber?.trim()) {
-      errors.vehicleSerialNumber = 'الرقم التسلسلي للمركبة مطلوب';
+    if (!data.serial_number?.trim()) {
+      errors.serial_number = 'الرقم التسلسلي للمركبة مطلوب';
     }
-  } else if (data.vehicleType === 'customs' && data.purpose !== 'transfer') {
-    if (!data.vehicleManufactureNumber?.trim()) {
-      errors.vehicleManufactureNumber = 'رقم صنع المركبة مطلوب';
+  } else if (data.vehicle_type === 'customs' && data.insurance_purpose !== 'property-transfer') {
+    if (!data.vehicle_manufacture_number?.trim()) {
+      errors.vehicle_manufacture_number = 'رقم صنع المركبة مطلوب';
     }
-    if (!data.customsCardNumber?.trim()) {
-      errors.customsCardNumber = 'رقم البطاقة الجمركية مطلوب';
+    if (!data.customs_code?.trim()) {
+      errors.customs_code = 'رقم البطاقة الجمركية مطلوب';
     }
   }
 

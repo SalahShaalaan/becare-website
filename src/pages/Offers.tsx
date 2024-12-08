@@ -8,8 +8,6 @@ interface Company {
   id: string;
   name: string;
   image_url: string;
-  created_at: string;
-  updated_at: string;
 }
 
 interface Offer {
@@ -18,8 +16,6 @@ interface Offer {
   company_id: string;
   type: FilterType;
   main_price: string;
-  created_at: string;
-  updated_at: string;
   company: Company;
   extra_features: Array<{ content: string; price: number }>;
   extra_expenses: Array<{ reason: string; price: number }>;
@@ -34,7 +30,7 @@ interface InsuranceTypeOption {
 }
 export default function Offers() {
   const selectedInsuranceType = useSelector(
-    (state: RootState) => state.insuranceDetails.insuranceType as FilterType
+    (state: RootState) => state.insuranceDetails.insurance_type as FilterType
   );
 
   const [offers, setOffers] = useState<Offer[]>([]);

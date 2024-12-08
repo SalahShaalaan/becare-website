@@ -3,9 +3,9 @@ import { ar } from "date-fns/locale";
 
 interface PolicyDetailsProps {
   policyDetails: {
-    insuranceType: string;
+    insurance_type: string;
     company: string;
-    startDate: string;
+    start_date: string;
     referenceNumber: string;
     endDate: string;
   };
@@ -26,11 +26,14 @@ export const PolicyDetails = ({ policyDetails }: PolicyDetailsProps) => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
-          <DetailItem label="نوع التأمين" value={policyDetails.insuranceType} />
+          <DetailItem
+            label="نوع التأمين"
+            value={policyDetails.insurance_type}
+          />
           <DetailItem label="شركة التأمين" value={policyDetails.company} />
           <DetailItem
             label="تاريخ بدء الوثيقة"
-            value={format(new Date(policyDetails.startDate), "dd MMMM yyyy", {
+            value={format(new Date(policyDetails.start_date), "dd MMMM yyyy", {
               locale: ar,
             })}
           />

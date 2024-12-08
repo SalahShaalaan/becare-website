@@ -1,16 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { updateField } from "../redux/slices/insuranceDetailsSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 type InsuranceType = "against-others" | "special" | "comprehensive";
-type VehicleUse =
-  | "personal"
-  | "commercial"
-  | "rental"
-  | "ride-sharing"
-  | "goods"
-  | "oil-transport";
 type RepairLocation = "workshop" | "agency";
 
 const insuranceTypes = [
@@ -23,9 +17,9 @@ const vehicleUseOptions = [
   { value: "personal", label: "شخصي" },
   { value: "commercial", label: "تجاري" },
   { value: "rental", label: "تأجير" },
-  { value: "ride-sharing", label: "نقل الاركاب أو كريم-أوبر" },
-  { value: "goods", label: "نقل بضائع" },
-  { value: "oil-transport", label: "نقل مشتقات نفطية" },
+  { value: "people-transportation", label: "نقل الاركاب أو كريم-أوبر" },
+  { value: "goods-transportation", label: "نقل بضائع" },
+  { value: "petrol-derivatives-trasnportation", label: "نقل مشتقات نفطية" },
 ];
 
 export const InsuranceDetails = () => {
@@ -41,11 +35,32 @@ export const InsuranceDetails = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (formData.agreeToTerms) {
-      dispatch(updateField(formData));
-      navigate("/offers");
+      try {
+        setIsSubmitting(true);
+
+        const simulateApiCall = new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ success: true, data: formData });
+          }, 1500);
+        });
+
+        localStorage.setItem("insuranceDetails", JSON.stringify(formData));
+
+        await simulateApiCall;
+
+        dispatch(updateField(formData));
+        navigate("/offers");
+      } catch (error) {
+        console.error("Error submitting insurance details:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -69,11 +84,13 @@ export const InsuranceDetails = () => {
                     type="button"
                     onClick={() =>
                       dispatch(
-                        updateField({ insuranceType: type.id as InsuranceType })
+                        updateField({
+                          insurance_type: type.id as InsuranceType,
+                        })
                       )
                     }
                     className={`p-3 rounded-xl border-2 text-center transition-all duration-300 ${
-                      formData.insuranceType === type.id
+                      formData.insurance_type === type.id
                         ? "bg-[#146394] text-white border-[#146394]"
                         : "border-gray-200 hover:border-[#146394] text-[#146394]"
                     }`}
@@ -91,9 +108,9 @@ export const InsuranceDetails = () => {
               </label>
               <input
                 type="date"
-                value={formData.startDate}
+                value={formData.start_date}
                 onChange={(e) =>
-                  dispatch(updateField({ startDate: e.target.value }))
+                  dispatch(updateField({ start_date: e.target.value }))
                 }
                 className="w-full p-3 md:p-4 border-2 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-[#146394] transition-all outline-none"
                 min={new Date().toISOString().split("T")[0]}
@@ -106,11 +123,9 @@ export const InsuranceDetails = () => {
                 الغرض من إستخدام المركبة
               </label>
               <select
-                value={formData.vehicleUse}
+                value={formData.vehicle_use_purpose}
                 onChange={(e) =>
-                  dispatch(
-                    updateField({ vehicleUse: e.target.value as VehicleUse })
-                  )
+                  dispatch(updateField({ vehicle_use_purpose: e.target.value }))
                 }
                 className="w-full p-3 md:p-4 border-2 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-[#146394] transition-all outline-none appearance-none bg-white rtl"
                 style={{
@@ -136,9 +151,9 @@ export const InsuranceDetails = () => {
               </label>
               <input
                 type="number"
-                value={formData.estimatedValue}
+                value={formData.estimated_worth}
                 onChange={(e) =>
-                  dispatch(updateField({ estimatedValue: e.target.value }))
+                  dispatch(updateField({ estimated_worth: e.target.value }))
                 }
                 className="w-full p-3 md:p-4 border-2 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-[#146394] transition-all outline-none"
                 min="0"
@@ -151,9 +166,9 @@ export const InsuranceDetails = () => {
                 سنة الصنع
               </label>
               <select
-                value={formData.manufacturingYear}
+                value={formData.year}
                 onChange={(e) =>
-                  dispatch(updateField({ manufacturingYear: e.target.value }))
+                  dispatch(updateField({ year: e.target.value }))
                 }
                 className="w-full p-3 md:p-4 border-2 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-[#146394] transition-all outline-none appearance-none bg-white rtl"
                 style={{
@@ -188,12 +203,12 @@ export const InsuranceDetails = () => {
                     onClick={() =>
                       dispatch(
                         updateField({
-                          repairLocation: location.id as RepairLocation,
+                          repair_place: location.id as RepairLocation,
                         })
                       )
                     }
                     className={`p-4 rounded-xl border-2 text-center transition-all duration-300 ${
-                      formData.repairLocation === location.id
+                      formData.repair_place === location.id
                         ? "bg-[#146394] text-white border-[#146394]"
                         : "border-gray-200 hover:border-[#146394] text-[#146394]"
                     }`}
@@ -226,10 +241,10 @@ export const InsuranceDetails = () => {
 
             <button
               type="submit"
-              disabled={!formData.agreeToTerms}
+              disabled={!formData.agreeToTerms || isSubmitting}
               className="w-full bg-[#146394] text-white py-4 rounded-xl font-semibold text-lg hover:bg-[#0f4c70] transition-all transform hover:scale-[0.99] active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Link to="/offers">اظهار العروض</Link>
+              {isSubmitting ? "جاري التحميل..." : "اظهار العروض"}
             </button>
           </form>
         </div>

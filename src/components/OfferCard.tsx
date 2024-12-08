@@ -56,7 +56,11 @@ export default function OfferCard({ offer }: OfferProps) {
     []
   );
 
-  const handleOfferSelection = useCallback(() => {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleOfferSelection = useCallback(async () => {
+    setIsProcessing(true);
+
     const endDate = new Date(
       new Date().setFullYear(new Date().getFullYear() + 1)
     )
@@ -69,9 +73,16 @@ export default function OfferCard({ offer }: OfferProps) {
       company_id: crypto.randomUUID(),
       type: offer.type,
       main_price: parseFloat(offer.main_price),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      selectedFeatures: offer.extra_features.filter((_, index) =>
+        selectedFeatures.includes(index)
+      ),
+      totalPrice,
+      company: offer.company,
+      purchaseDate: new Date().toISOString(),
     };
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const existingOffers = JSON.parse(
       localStorage.getItem("selectedOffers") || "[]"
@@ -82,9 +93,9 @@ export default function OfferCard({ offer }: OfferProps) {
     dispatch(
       updatePaymentDetails({
         policyDetails: {
-          insuranceType: getArabicInsuranceType(offer.type),
+          insurance_type: getArabicInsuranceType(offer.type),
           company: offer.company.name,
-          startDate: insuranceDetails.startDate,
+          start_date: insuranceDetails.start_date,
           endDate,
           referenceNumber: Math.floor(
             100000000 + Math.random() * 900000000
@@ -97,8 +108,17 @@ export default function OfferCard({ offer }: OfferProps) {
         },
       })
     );
+
+    setIsProcessing(false);
     navigate("/payment");
-  }, [offer, totalPrice, dispatch, navigate, insuranceDetails.startDate]);
+  }, [
+    offer,
+    totalPrice,
+    dispatch,
+    navigate,
+    insuranceDetails.start_date,
+    selectedFeatures,
+  ]);
 
   const getArabicInsuranceType = useMemo(
     () => (type: string) => {
@@ -185,9 +205,17 @@ export default function OfferCard({ offer }: OfferProps) {
             </div>
             <button
               onClick={handleOfferSelection}
-              className="w-full sm:w-2/3 lg:w-1/2 bg-[#ffa500] hover:bg-[#ff9000] active:bg-[#f08800] text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+              disabled={isProcessing}
+              className="w-full sm:w-2/3 lg:w-1/2 bg-[#ffa500] hover:bg-[#ff9000] active:bg-[#f08800] text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              شراء الان
+              {isProcessing ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  جاري المعالجة...
+                </div>
+              ) : (
+                "شراء الان"
+              )}
             </button>
           </div>
         </div>

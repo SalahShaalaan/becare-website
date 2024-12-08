@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface InsuranceDetailsState {
-  insuranceType: 'against-others' | 'special' | 'comprehensive';
-  startDate: string;
-  vehicleUse: string;
-  estimatedValue: string;
-  manufacturingYear: string;
-  repairLocation: 'workshop' | 'agency';
+  insurance_type: string
+  start_date: string;
+  vehicle_use_purpose: string;
+  estimated_worth: string;
+  year: string;
+  repair_place: string
   agreeToTerms: boolean;
   selectedCompany: string;
 }
 
 const initialState: InsuranceDetailsState = {
-  insuranceType: 'against-others',
-  startDate: '',
-  vehicleUse: '',
-  estimatedValue: '',
-  manufacturingYear: '',
-  repairLocation: 'workshop',
+  insurance_type: '',
+  start_date: '',
+  vehicle_use_purpose: '',
+  estimated_worth: '',
+  year: '',
+  repair_place: '',
   agreeToTerms: false,
   selectedCompany: '',
 

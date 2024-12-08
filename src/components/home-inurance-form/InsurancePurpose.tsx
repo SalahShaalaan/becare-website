@@ -13,17 +13,17 @@ const InsurancePurpose: React.FC<Props> = ({
   errors,
 }) => {
   // When purpose changes, reset related fields
-  const handlePurposeChange = (newPurpose: "new" | "transfer") => {
+  const handlePurposeChange = (newPurpose: "renewal" | "property-transfer") => {
     setFormData((prev) => ({
       ...prev,
-      purpose: newPurpose,
+      insurance_purpose: newPurpose,
       // Reset fields when switching purpose
-      nationalId: "",
-      buyerNationalId: "",
-      sellerNationalId: "",
+      owner_identity_number: "",
+      buyer_identity_number: "",
+      seller_identity_number: "",
       // Force registration type when transfer is selected
-      vehicleType:
-        newPurpose === "transfer" ? "registration" : prev.vehicleType,
+      vehicle_type:
+        newPurpose === "property-transfer" ? "registration" : prev.vehicle_type,
     }));
   };
 
@@ -39,24 +39,26 @@ const InsurancePurpose: React.FC<Props> = ({
       <div className="space-y-6">
         <div className="flex gap-4">
           {[
-            { value: "new", label: "تأمين جديد" },
-            { value: "transfer", label: "نقل ملكية" },
+            { value: "renewal", label: "تأمين جديد" },
+            { value: "property-transfer", label: "نقل ملكية" },
           ].map((option) => (
             <label key={option.value} className="flex-1">
               <input
                 type="radio"
                 name="purpose"
                 value={option.value}
-                checked={formData.purpose === option.value}
+                checked={formData.insurance_purpose === option.value}
                 onChange={() =>
-                  handlePurposeChange(option.value as "new" | "transfer")
+                  handlePurposeChange(
+                    option.value as "renewal" | "property-transfer"
+                  )
                 }
                 className="hidden"
               />
               <span
                 className={`block text-center py-3 rounded-lg transition-all duration-200 cursor-pointer
                 ${
-                  formData.purpose === option.value
+                  formData.insurance_purpose === option.value
                     ? "bg-[#146394] text-white shadow-lg transform scale-105"
                     : "bg-gray-100 text-[#146394] hover:bg-gray-200"
                 }`}
@@ -75,41 +77,52 @@ const InsurancePurpose: React.FC<Props> = ({
             </label>
             <input
               type="text"
-              value={formData.fullName}
+              value={formData.documment_owner_full_name}
               onChange={(e) =>
-                setFormData((prev) => ({ ...prev, fullName: e.target.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  documment_owner_full_name: e.target.value,
+                }))
               }
               className={`w-full px-4 py-3 border-2 rounded-lg ${
-                errors.fullName ? "border-red-500" : "border-gray-300"
+                errors.documment_owner_full_name
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
               placeholder="أدخل اسم مالك الوثيقة بالكامل"
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+            {errors.documment_owner_full_name && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.documment_owner_full_name}
+              </p>
             )}
           </div>
 
-          {formData.purpose === "new" ? (
+          {formData.insurance_purpose === "renewal" ? (
             <div>
               <label className="block text-[#146394] font-bold mb-2">
                 رقم الهوية الوطنية
               </label>
               <input
                 type="text"
-                value={formData.nationalId || ""}
+                value={formData.owner_identity_number || ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    nationalId: e.target.value,
+                    owner_identity_number: e.target.value,
                   }))
                 }
                 className={`w-full px-4 py-3 border-2 rounded-lg ${
-                  errors.nationalId ? "border-red-500" : "border-gray-300"
+                  errors.owner_identity_number
+                    ? "border-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="أدخل رقم الهوية"
               />
-              {errors.nationalId && (
-                <p className="text-red-500 text-xs mt-1">{errors.nationalId}</p>
+              {errors.owner_identity_number && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.owner_identity_number}
+                </p>
               )}
             </div>
           ) : (
@@ -120,23 +133,23 @@ const InsurancePurpose: React.FC<Props> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.buyerNationalId || ""}
+                  value={formData.buyer_identity_number || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      buyerNationalId: e.target.value,
+                      buyer_identity_number: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.buyerNationalId
+                    errors.buyer_identity_number
                       ? "border-red-500"
                       : "border-gray-300"
                   }`}
                   placeholder="أدخل رقم هوية المشتري"
                 />
-                {errors.buyerNationalId && (
+                {errors.buyer_identity_number && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.buyerNationalId}
+                    {errors.buyer_identity_number}
                   </p>
                 )}
               </div>
@@ -146,23 +159,23 @@ const InsurancePurpose: React.FC<Props> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.sellerNationalId || ""}
+                  value={formData.seller_identity_number || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      sellerNationalId: e.target.value,
+                      seller_identity_number: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.sellerNationalId
+                    errors.seller_identity_number
                       ? "border-red-500"
                       : "border-gray-300"
                   }`}
                   placeholder="أدخل رقم هوية البائع"
                 />
-                {errors.sellerNationalId && (
+                {errors.seller_identity_number && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.sellerNationalId}
+                    {errors.seller_identity_number}
                   </p>
                 )}
               </div>

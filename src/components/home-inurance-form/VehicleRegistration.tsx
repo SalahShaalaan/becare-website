@@ -33,13 +33,13 @@ const VehicleRegistration: React.FC<Props> = ({
             <label key={option.value} className="flex-1">
               <input
                 type="radio"
-                name="vehicleType"
+                name="vehicle_type"
                 value={option.value}
-                checked={formData.vehicleType === option.value}
+                checked={formData.vehicle_type === option.value}
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
-                    vehicleType: e.target.value as "registration" | "customs",
+                    vehicle_type: e.target.value as "registration" | "customs",
                   }));
                 }}
                 disabled={disabled && option.value === "customs"}
@@ -48,7 +48,7 @@ const VehicleRegistration: React.FC<Props> = ({
               <span
                 className={`block text-center py-3 rounded-lg transition-all duration-200 cursor-pointer
                   ${
-                    formData.vehicleType === option.value
+                    formData.vehicle_type === option.value
                       ? "bg-[#146394] text-white shadow-lg transform scale-105"
                       : "bg-gray-100 text-[#146394] hover:bg-gray-200"
                   }
@@ -66,7 +66,7 @@ const VehicleRegistration: React.FC<Props> = ({
 
         {/* Dynamic Fields Based on Vehicle Type */}
         <div className="space-y-4">
-          {formData.vehicleType === "registration" ? (
+          {formData.vehicle_type === "registration" ? (
             <>
               <div>
                 <label className="block text-[#146394] font-bold mb-2">
@@ -74,22 +74,20 @@ const VehicleRegistration: React.FC<Props> = ({
                 </label>
                 <input
                   type="tel"
-                  value={formData.phoneNumber || ""}
+                  value={formData.phone || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      phoneNumber: e.target.value,
+                      phone: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.phoneNumber ? "border-red-500" : "border-gray-300"
+                    errors.phone ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="أدخل رقم الهاتف"
                 />
-                {errors.phoneNumber && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.phoneNumber}
-                  </p>
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
                 )}
               </div>
               <div>
@@ -98,23 +96,21 @@ const VehicleRegistration: React.FC<Props> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.vehicleSerialNumber || ""}
+                  value={formData.serial_number || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      vehicleSerialNumber: e.target.value,
+                      serial_number: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.vehicleSerialNumber
-                      ? "border-red-500"
-                      : "border-gray-300"
+                    errors.serial_number ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="أدخل الرقم التسلسلي للمركبة"
                 />
-                {errors.vehicleSerialNumber && (
+                {errors.serial_number && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.vehicleSerialNumber}
+                    {errors.serial_number}
                   </p>
                 )}
               </div>
@@ -127,23 +123,23 @@ const VehicleRegistration: React.FC<Props> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.vehicleManufactureNumber || ""}
+                  value={formData.vehicle_manufacture_number || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      vehicleManufactureNumber: e.target.value,
+                      vehicle_manufacture_number: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.vehicleManufactureNumber
+                    errors.vehicle_manufacture_number
                       ? "border-red-500"
                       : "border-gray-300"
                   }`}
                   placeholder="أدخل رقم صنع المركبة"
                 />
-                {errors.vehicleManufactureNumber && (
+                {errors.vehicle_manufacture_number && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.vehicleManufactureNumber}
+                    {errors.vehicle_manufacture_number}
                   </p>
                 )}
               </div>
@@ -153,23 +149,21 @@ const VehicleRegistration: React.FC<Props> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.customsCardNumber || ""}
+                  value={formData.customs_code || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      customsCardNumber: e.target.value,
+                      customs_code: e.target.value,
                     }))
                   }
                   className={`w-full px-4 py-3 border-2 rounded-lg ${
-                    errors.customsCardNumber
-                      ? "border-red-500"
-                      : "border-gray-300"
+                    errors.customs_code ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="أدخل رقم البطاقة الجمركية"
                 />
-                {errors.customsCardNumber && (
+                {errors.customs_code && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.customsCardNumber}
+                    {errors.customs_code}
                   </p>
                 )}
               </div>

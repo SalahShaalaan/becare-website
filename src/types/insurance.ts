@@ -1,14 +1,14 @@
 export interface InsuranceFormData {
-  purpose: 'new' | 'transfer';
-  vehicleType: 'registration' | 'customs';
-  fullName: string;
-  nationalId?: string;
-  buyerNationalId?: string;
-  sellerNationalId?: string;
-  phoneNumber?: string;
-  vehicleSerialNumber?: string;
-  vehicleManufactureNumber?: string;
-  customsCardNumber?: string;
+  insurance_purpose: 'renewal' | 'property-transfer';
+  vehicle_type: 'registration' | 'customs';
+  documment_owner_full_name: string;
+  owner_identity_number?: string;
+  buyer_identity_number?: string;
+  seller_identity_number?: string;
+  phone?: string;
+  serial_number?: string;
+  vehicle_manufacture_number?: string;
+  customs_code?: string;
   agreeToTerms: boolean;
 }
 

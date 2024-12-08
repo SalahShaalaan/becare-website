@@ -16,9 +16,9 @@ const InsuranceFormContainer: React.FC = () => {
       return JSON.parse(savedData);
     }
     return {
-      purpose: "new",
-      vehicleType: "registration",
-      fullName: "",
+      insurance_purpose: "renewal",
+      vehicle_type: "registration",
+      full_name: "",
       agreeToTerms: false,
     };
   };
@@ -36,15 +36,15 @@ const InsuranceFormContainer: React.FC = () => {
   useEffect(() => {
     setFormData((prev) => {
       // If purpose is transfer, force vehicle type to registration
-      if (prev.purpose === "transfer") {
-        return { ...prev, vehicleType: "registration" };
+      if (prev.insurance_purpose === "property-transfer") {
+        return { ...prev, vehicle_type: "registration" };
       }
 
       // If purpose is new and vehicle type was forced to registration,
       // allow user to choose again
       return prev;
     });
-  }, [formData.purpose]);
+  }, [formData.insurance_purpose]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -76,8 +76,8 @@ const InsuranceFormContainer: React.FC = () => {
     setFormData((prev) => {
       const newData = typeof updater === "function" ? updater(prev) : updater;
 
-      if (newData.purpose === "transfer") {
-        newData.vehicleType = "registration";
+      if (newData.insurance_purpose === "property-transfer") {
+        newData.vehicle_type = "registration";
       }
 
       return newData;
@@ -108,7 +108,7 @@ const InsuranceFormContainer: React.FC = () => {
                 formData={formData}
                 setFormData={setFormDataWithConstraints}
                 errors={errors}
-                disabled={formData.purpose === "transfer"}
+                disabled={formData.insurance_purpose === "property-transfer"}
               />
             </div>
 
