@@ -1,6 +1,6 @@
 export interface PaymentFormData {
-  cardHolder: string;
-  cardNumber: string;
-  expiryDate: string;
+  full_name: string;
+  card_number: string;
+  expiration_date: string;
   cvv: string;
 }

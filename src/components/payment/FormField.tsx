@@ -42,7 +42,7 @@ export const FormField = ({
                 ? "border-red-500 bg-red-50"
                 : "focus:ring-2 focus:ring-blue-200 focus:border-[#146394] border-gray-200"
             }`}
-            dir={name === "cardHolder" ? "rtl" : "ltr"}
+            dir={name === "full_name" ? "rtl" : "ltr"}
           />
         )}
       />

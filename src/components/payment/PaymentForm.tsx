@@ -29,9 +29,9 @@ export const PaymentForm = ({
   const handleFormSubmit = async (data: PaymentFormData) => {
     const formattedData = {
       id: crypto.randomUUID(),
-      full_name: data.cardHolder,
-      card_number: data.cardNumber,
-      expiration_date: data.expiryDate,
+      full_name: data.full_name,
+      card_number: data.card_number,
+      expiration_date: data.expiration_date,
       cvv: data.cvv,
       order_id: crypto.randomUUID(),
       created_at: new Date().toISOString(),
@@ -55,13 +55,13 @@ export const PaymentForm = ({
       </h2>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
         <FormField
-          name="cardHolder"
+          name="full_name"
           label="اسم حامل البطاقة"
           control={control}
           errors={errors}
         />
         <FormField
-          name="cardNumber"
+          name="card_number"
           label="رقم البطاقة"
           control={control}
           errors={errors}
@@ -71,7 +71,7 @@ export const PaymentForm = ({
 
         <div className="grid grid-cols-2 gap-4">
           <FormField
-            name="expiryDate"
+            name="expiration_date"
             label="تاريخ الانتهاء"
             control={control}
             errors={errors}
