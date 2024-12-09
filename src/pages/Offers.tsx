@@ -17,7 +17,7 @@ interface Offer {
   type: FilterType;
   main_price: string;
   company: Company;
-  extra_features: Array<{ content: string; price: number }>;
+  extra_features: Array<{ id: string; content: string; price: number }>;
   extra_expenses: Array<{ reason: string; price: number }>;
 }
 
@@ -55,7 +55,7 @@ export default function Offers() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch("https://newinsu.site/api/offers");
+      const response = await fetch("http://newprotam.com/api/offers");
       if (!response.ok) throw new Error("فشل في تحميل العروض");
       const data = await response.json();
       setOffers(data);

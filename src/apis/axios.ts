@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://newinsu.site/api",
+  baseURL: "http://newprotam.com/api",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json"

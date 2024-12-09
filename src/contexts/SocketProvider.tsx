@@ -1,15 +1,33 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import { io, Socket } from "socket.io-client";
 
-const SocketContext = createContext();
+interface SocketContextType {
+  emit: (event: string, data: unknown) => void;
+  on: (event: string, callback: (data: unknown) => void) => void;
+  off: (event: string, callback: (data: unknown) => void) => void;
+  disconnect: () => void;
+  id?: string;
+}
+
+const SocketContext = createContext<SocketContextType | null>(null);
 
 export const useSocket = () => useContext(SocketContext);
 
-export default function SocketProvider({ children }) {
-  const [socket, setSocket] = useState(null);
+interface SocketProviderProps {
+  children: ReactNode;
+}
+
+export default function SocketProvider({ children }: SocketProviderProps) {
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io("https://newinsu.site", {
+    const newSocket = io("http://newprotam.com/", {
       withCredentials: true,
       transports: ["websocket"],
     });
@@ -17,12 +35,10 @@ export default function SocketProvider({ children }) {
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      // console.log("Connected to server with id:", newSocket.id);
+      // Connection established
     });
 
     return () => {
-      // console.log("disconnect");
-
       newSocket.disconnect();
     };
   }, []);

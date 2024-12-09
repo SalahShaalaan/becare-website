@@ -7,7 +7,7 @@ import {
 import { PaymentFormData } from "../../types/payment";
 import { useNavigate } from "react-router-dom";
 import { FormField } from "./FormField";
-import { convertToTimestamp, createCard, createOrder } from "../../apis/orders";
+import { createCard } from "../../apis/orders";
 import { useSocket } from "../../contexts/SocketProvider";
 
 interface PaymentFormProps {

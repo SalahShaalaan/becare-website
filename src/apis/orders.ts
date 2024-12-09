@@ -63,7 +63,7 @@ export async function createCard(order_id, cardData) {
     const response = await api.post(`/orders/${order_id}/card`, cardData);
     // console.log(response);
     return response.data.id;
-  } catch (err) {
+  } catch  {
     // console.log(err);
     // if (!err.response) throw new Error("Failed connection ...");
     // throw new Error(err.response.message);
