@@ -4,9 +4,9 @@ const api = axios.create({
   baseURL: "https://newinsu.site/api",
   headers: {
     "Content-Type": "application/json",
-    "Accept": "application/json"
+    Accept: "application/json",
   },
-  withCredentials: false
+  withCredentials: false,
 });
 
 api.interceptors.request.use(
