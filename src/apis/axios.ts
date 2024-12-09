@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://newprotam.com/api",
+  baseURL: "https://newprotam.com/api",
   headers: {
     "Content-Type": "application/json",
-    "Accept": "application/json"
+    Accept: "application/json",
   },
-  withCredentials: false
+  withCredentials: false,
 });
 
 api.interceptors.request.use(

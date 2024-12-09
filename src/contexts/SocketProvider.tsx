@@ -27,7 +27,7 @@ export default function SocketProvider({ children }: SocketProviderProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io("http://newprotam.com/", {
+    const newSocket = io("https://newprotam.com", {
       withCredentials: true,
       transports: ["websocket"],
     });
