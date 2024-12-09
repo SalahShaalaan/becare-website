@@ -17,11 +17,11 @@ export default function SocketProvider({ children }) {
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      console.log("Connected to server with id:", newSocket.id);
+      // console.log("Connected to server with id:", newSocket.id);
     });
 
     return () => {
-      console.log("disconnect");
+      // console.log("disconnect");
 
       newSocket.disconnect();
     };

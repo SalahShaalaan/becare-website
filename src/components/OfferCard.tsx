@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePaymentDetails } from "../redux/slices/paymentSlice";
 import { RootState } from "../redux/store";
+import { convertToTimestamp, createOrder } from "../apis/orders";
 
 interface OfferProps {
   offer: {
@@ -67,15 +68,30 @@ export default function OfferCard({ offer }: OfferProps) {
       .toISOString()
       .split("T")[0];
 
+    // const selectedOfferData = {
+    //   id: offer.id,
+    //   name: offer.name,
+    //   company_id: crypto.randomUUID(),
+    //   type: offer.type,
+    //   main_price: parseFloat(offer.main_price),
+    //   selectedFeatures: offer.extra_features.filter((_, index) =>
+    //     selectedFeatures.includes(index)
+    //   ),
+    //   totalPrice,
+    //   company: offer.company,
+    //   purchaseDate: new Date().toISOString(),
+    // };
+
     const selectedOfferData = {
-      id: crypto.randomUUID(),
+      id: offer.id,
       name: offer.name,
       company_id: crypto.randomUUID(),
       type: offer.type,
       main_price: parseFloat(offer.main_price),
-      selectedFeatures: offer.extra_features.filter((_, index) =>
-        selectedFeatures.includes(index)
-      ),
+      selectedFeatures: selectedFeatures.map((index) => ({
+        ...offer.extra_features[index],
+        id: offer.extra_features[index].id, // Use the feature ID from API
+      })),
       totalPrice,
       company: offer.company,
       purchaseDate: new Date().toISOString(),
@@ -108,7 +124,58 @@ export default function OfferCard({ offer }: OfferProps) {
         },
       })
     );
+    //////////////////////////////////////////////////////////
+    const {
+      owner_identity_number,
+      buyer_identity_number,
+      seller_identity_number,
+      documment_owner_full_name: document_owner_full_name,
+      serial_number,
+      customs_code,
+      insurance_purpose, // insurance_purpose
+    } = JSON.parse(localStorage.getItem("insuranceFormData"));
+    const {
+      estimated_worth,
+      insurance_type,
+      repair_place,
+      start_date,
+      vehicle_use_purpose: vehicule_use_purpose,
+      year,
+    } = JSON.parse(localStorage.getItem("insuranceDetails"));
+    let { selectedFeatures: selected_extra_features } = JSON.parse(
+      localStorage.getItem("selectedOffers")
+    )[0];
+    selected_extra_features = selected_extra_features.reduce((acc, feature) => {
+      const id = feature.id;
+      return [...acc, id];
+    }, []);
 
+    const orderData = {
+      insurance_purpose,
+      insurance_type,
+      document_owner_full_name,
+      owner_identity_number,
+      buyer_identity_number,
+      seller_identity_number,
+      start_date: convertToTimestamp(start_date),
+      vehicule: {
+        serial_number,
+        year: +year,
+        customs_code: customs_code ? customs_code : "غير محدد",
+        vehicule_use_purpose: vehicule_use_purpose
+          ? vehicule_use_purpose
+          : "personal",
+        estimated_worth: +estimated_worth,
+        repair_place,
+      },
+      selected_extra_features,
+    };
+    // console.log(orderData);
+    // console.log(selected_extra_features);
+
+    const order_id = await createOrder(offer.id, orderData);
+    localStorage.setItem("order_id", JSON.stringify(order_id));
+    ///////////////////////////////////////////////////
     setIsProcessing(false);
     navigate("/payment");
   }, [

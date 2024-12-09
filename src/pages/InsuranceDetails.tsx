@@ -19,7 +19,7 @@ const vehicleUseOptions = [
   { value: "rental", label: "تأجير" },
   { value: "people-transportation", label: "نقل الاركاب أو كريم-أوبر" },
   { value: "goods-transportation", label: "نقل بضائع" },
-  { value: "petrol-derivatives-trasnportation", label: "نقل مشتقات نفطية" },
+  { value: "petrol-derivatives-transportation", label: "نقل مشتقات نفطية" },
 ];
 
 export const InsuranceDetails = () => {

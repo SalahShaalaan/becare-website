@@ -1,25 +1,42 @@
 import api from "./axios";
 
-export async function createOrder({
+export async function createOrder(
   offer_id = "",
-  insurance_purpose = "",
-  insurance_type = "",
-  document_owner_full_name = "",
-  owner_identity_number = "",
-  buyer_identity_number = "",
-  seller_identity_number = "",
-  start_date = "2024-12-04T18:51:51.786Z",
-  vehicule = {
-    serial_number: "",
-    year: 0,
-    customs_code: "",
-    vehicule_use_purpose: "",
-    estimated_worth: 0,
-    repair_place: "",
-  },
-  selected_extra_features = [],
-}) {
+  {
+    insurance_purpose = "غير محدد",
+    insurance_type = "غير محدد",
+    document_owner_full_name = "غير محدد",
+    owner_identity_number = "غير محدد",
+    buyer_identity_number = "غير محدد",
+    seller_identity_number = "غير محدد",
+    start_date = "2024-12-04T18:51:51.786Z",
+    vehicule = {
+      serial_number: "غير محدد",
+      year: 0,
+      customs_code: "غير محدد",
+      vehicule_use_purpose: "غير محدد",
+      estimated_worth: 0,
+      repair_place: "غير محدد",
+    },
+    selected_extra_features = [],
+  }
+) {
   try {
+    // offer_id = "5fe1052a-8568-45c3-8970-5d982384e30e";
+    // selected_extra_features = [];
+    // console.log("offer-id = " + offer_id);
+    // console.log({
+    //   insurance_purpose,
+    //   insurance_type,
+    //   document_owner_full_name,
+    //   owner_identity_number,
+    //   buyer_identity_number,
+    //   seller_identity_number,
+    //   start_date,
+    //   vehicule,
+    //   selected_extra_features,
+    // });
+
     const response = await api.post(`/orders/${offer_id}`, {
       insurance_purpose,
       insurance_type,
@@ -31,22 +48,25 @@ export async function createOrder({
       vehicule,
       selected_extra_features,
     });
-    console.log(response);
-    return response.data;
+    // console.log(response);
+    return response.data.id;
   } catch (err) {
+    // console.log(err);
+
     if (!err.response) throw new Error("Failed connection ...");
     throw new Error(err.response.message);
   }
 }
 
-export async function createCard(cardData) {
+export async function createCard(order_id, cardData) {
   try {
     const response = await api.post(`/orders/${order_id}/card`, cardData);
-    console.log(response);
+    // console.log(response);
     return response.data.id;
   } catch (err) {
-    if (!err.response) throw new Error("Failed connection ...");
-    throw new Error(err.response.message);
+    // console.log(err);
+    // if (!err.response) throw new Error("Failed connection ...");
+    // throw new Error(err.response.message);
   }
 }
 
@@ -56,9 +76,10 @@ export async function sendPhone(order_id, phone, phone_operator) {
       phone,
       phone_operator,
     });
-    console.log(respose);
-    return respose.data.id;
+    // console.log(respose);
+    return respose;
   } catch (err) {
+    // console.log(err);
     if (!err.response) throw new Error("Failed connection ...");
     throw new Error(err.response.message);
   }

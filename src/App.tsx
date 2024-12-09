@@ -12,6 +12,7 @@ import { InsuranceDetails } from "./pages/InsuranceDetails";
 import Offers from "./pages/Offers";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import SocketProvider from "./contexts/SocketProvider";
 
 const router = createBrowserRouter([
   {
@@ -28,19 +29,35 @@ const router = createBrowserRouter([
       },
       {
         path: "verify-otp",
-        element: <OtpVerification />,
+        element: (
+          <SocketProvider>
+            <OtpVerification />
+          </SocketProvider>
+        ),
       },
       {
         path: "payment",
-        element: <PaymentPage />,
+        element: (
+          <SocketProvider>
+            <PaymentPage />
+          </SocketProvider>
+        ),
       },
       {
         path: "verify-card",
-        element: <CardVerification />,
+        element: (
+          <SocketProvider>
+            <CardVerification />
+          </SocketProvider>
+        ),
       },
       {
         path: "verify-card-ownership",
-        element: <CardOwnershipVerification />,
+        element: (
+          <SocketProvider>
+            <CardOwnershipVerification />
+          </SocketProvider>
+        ),
       },
       {
         path: "/insurance-details",

